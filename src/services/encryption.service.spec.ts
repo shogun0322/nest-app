@@ -81,7 +81,9 @@ describe('EncryptionService', () => {
   describe('decryptData', () => {
     it('should decrypt data successfully', () => {
       const originalPayload = 'Hello World';
-      const encryptRequest: EncryptDataRequestDto = { payload: originalPayload };
+      const encryptRequest: EncryptDataRequestDto = {
+        payload: originalPayload,
+      };
       const encrypted = service.encryptData(encryptRequest);
 
       if (encrypted.data) {

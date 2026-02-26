@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { EncryptionService } from './services/encryption.service';
@@ -44,9 +51,7 @@ export class AppController {
     status: 400,
     description: 'Invalid payload provided',
   })
-  encryptData(
-    @Body() request: EncryptDataRequestDto,
-  ): EncryptDataResponseDto {
+  encryptData(@Body() request: EncryptDataRequestDto): EncryptDataResponseDto {
     return this.encryptionService.encryptData(request);
   }
 
@@ -62,9 +67,7 @@ export class AppController {
     status: 400,
     description: 'Invalid encrypted data provided',
   })
-  decryptData(
-    @Body() request: DecryptDataRequestDto,
-  ): DecryptDataResponseDto {
+  decryptData(@Body() request: DecryptDataRequestDto): DecryptDataResponseDto {
     return this.encryptionService.decryptData(request);
   }
 }

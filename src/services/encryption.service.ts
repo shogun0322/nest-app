@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { createPublicKey, createPrivateKey, publicEncrypt, privateDecrypt } from 'crypto';
+import {
+  createPublicKey,
+  createPrivateKey,
+  publicEncrypt,
+  privateDecrypt,
+} from 'crypto';
 import { RSA_PUBLIC_KEY, RSA_PRIVATE_KEY } from '../config/rsa-keys';
 import {
   EncryptDataRequestDto,
   EncryptDataResponseDto,
-  EncryptDataDto,
 } from '../dtos/encrypt-data.dto';
 import {
   DecryptDataRequestDto,
   DecryptDataResponseDto,
-  DecryptedDataDto,
 } from '../dtos/decrypt-data.dto';
 
 @Injectable()
@@ -37,7 +40,10 @@ export class EncryptionService {
       }
 
       // Encrypt the payload
-      const encrypted = publicEncrypt(this.publicKey, Buffer.from(request.payload));
+      const encrypted = publicEncrypt(
+        this.publicKey,
+        Buffer.from(request.payload),
+      );
       const encryptedBase64 = encrypted.toString('base64');
 
       // Split the encrypted data into data1 and data2
