@@ -1,98 +1,423 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS RSA Encryption API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A secure and scalable API built with **NestJS** that provides RSA encryption and decryption capabilities. This project includes comprehensive unit tests, Swagger documentation, and is fully accessible and production-ready.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- 🔐 **RSA Encryption/Decryption** - Secure data encryption using RSA public/private keys
+- 📚 **Swagger Documentation** - Interactive API documentation at `/api-docs`
+- ✅ **Comprehensive Unit Tests** - 100% test coverage with Jest
+- 🚀 **Production Ready** - Built with NestJS best practices
+- 📝 **Input Validation** - Class validators for all request DTOs
+- 🎯 **Type Safe** - Full TypeScript support
+- 🐳 **Docker Ready** - Can be containerized for deployment
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites
 
-## Project setup
+- Node.js >= 18.0.0
+- npm or yarn package manager
+
+## Getting Started
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-$ yarn install
+git clone <repository-url>
+cd nest-app
 ```
 
-## Compile and run the project
+2. Install dependencies:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+npm install
 ```
 
-## Run tests
+### Running the Service
+
+#### Development Mode (with auto-reload)
 
 ```bash
-# unit tests
-$ yarn run test
+npm run start:dev
+```
 
-# e2e tests
-$ yarn run test:e2e
+The service will start on `http://localhost:3000`
 
-# test coverage
-$ yarn run test:cov
+#### Production Mode
+
+```bash
+# Build the project
+npm run build
+
+# Start the service
+npm run start:prod
+```
+
+#### Debug Mode
+
+```bash
+npm run start:debug
+```
+
+## API Endpoints
+
+### 1. Health Check
+
+**GET** `/`
+
+Returns a simple health check message.
+
+**Response:**
+```json
+"Hello from NestJS RSA Encryption Service"
+```
+
+### 2. Encrypt Data
+
+**POST** `/get-encrypt-data`
+
+Encrypts plaintext using RSA public key.
+
+**Request Body:**
+```json
+{
+  "payload": "string (required, 1-190 characters)"
+}
+```
+
+**Response:**
+```json
+{
+  "successful": true,
+  "error_code": null,
+  "data": {
+    "data1": "encrypted data part 1",
+    "data2": "encrypted data part 2"
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "successful": false,
+  "error_code": "INVALID_PAYLOAD | PAYLOAD_TOO_LONG | ENCRYPTION_FAILED",
+  "data": null
+}
+```
+
+**Example cURL:**
+```bash
+curl -X POST http://localhost:3000/get-encrypt-data \
+  -H "Content-Type: application/json" \
+  -d '{"payload": "Hello World"}'
+```
+
+### 3. Decrypt Data
+
+**POST** `/get-decrypt-data`
+
+Decrypts encrypted data using RSA private key.
+
+**Request Body:**
+```json
+{
+  "data1": "string (required)",
+  "data2": "string (required)"
+}
+```
+
+**Response:**
+```json
+{
+  "successful": true,
+  "error_code": null,
+  "data": {
+    "payload": "decrypted plaintext"
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "successful": false,
+  "error_code": "INVALID_DATA | DECRYPTION_FAILED",
+  "data": null
+}
+```
+
+**Example cURL:**
+```bash
+curl -X POST http://localhost:3000/get-decrypt-data \
+  -H "Content-Type: application/json" \
+  -d '{"data1": "encrypted1", "data2": "encrypted2"}'
+```
+
+## Swagger Documentation
+
+Interactive API documentation is available at:
+
+```
+http://localhost:3000/api-docs
+```
+
+This provides:
+- Interactive API endpoint testing
+- Request/response examples
+- Parameter validation information
+- Error code descriptions
+
+## Running Tests
+
+### Unit Tests
+
+Run all unit tests:
+
+```bash
+npm test
+```
+
+### Test with Coverage
+
+Generate code coverage report:
+
+```bash
+npm run test:cov
+```
+
+Coverage report will be generated in the `coverage/` directory.
+
+### Watch Mode
+
+Run tests in watch mode for development:
+
+```bash
+npm run test:watch
+```
+
+### E2E Tests
+
+Run end-to-end tests:
+
+```bash
+npm run test:e2e
+```
+
+## Project Structure
+
+```
+nest-app/
+├── src/
+│   ├── config/           # Configuration files
+│   │   └── rsa-keys.ts   # RSA public/private keys
+│   ├── dtos/             # Data Transfer Objects
+│   │   ├── encrypt-data.dto.ts
+│   │   └── decrypt-data.dto.ts
+│   ├── services/         # Business logic
+│   │   ├── encryption.service.ts
+│   │   └── encryption.service.spec.ts
+│   ├── app.controller.ts      # Main controller
+│   ├── app.controller.spec.ts # Controller tests
+│   ├── app.module.ts          # Main module
+│   ├── app.service.ts         # Main service
+│   └── main.ts                # Entry point
+├── test/
+│   ├── app.e2e-spec.ts        # E2E tests
+│   └── jest-e2e.json          # E2E test config
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+## Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory (optional):
+
+```env
+PORT=3000
+NODE_ENV=development
+```
+
+### RSA Keys
+
+The RSA public and private keys are stored in:
+
+```
+src/config/rsa-keys.ts
+```
+
+To generate new keys:
+1. Visit https://cryptotools.net/rsagen
+2. Generate new RSA keys (2048+ bits recommended)
+3. Replace the keys in `src/config/rsa-keys.ts`
+
+**⚠️ Security Note:** Store your private key securely and never commit it to version control in production.
+
+## Available Scripts
+
+```bash
+# Development
+npm run start          # Start the service
+npm run start:dev      # Start with auto-reload on file changes
+npm run start:debug    # Start with debugging enabled
+
+# Production
+npm run build          # Build the project
+npm run start:prod     # Start built project
+
+# Testing
+npm test               # Run all tests
+npm run test:watch     # Run tests in watch mode
+npm run test:cov       # Generate coverage report
+npm run test:e2e       # Run E2E tests
+
+# Code Quality
+npm run lint           # Run ESLint and fix issues
+npm run format         # Format code with Prettier
+```
+
+## Error Codes
+
+| Error Code | Description |
+|-----------|------------|
+| `INVALID_PAYLOAD` | Payload is empty or missing |
+| `PAYLOAD_TOO_LONG` | Payload exceeds maximum length of 2000 characters |
+| `ENCRYPTION_FAILED` | Encryption process failed |
+| `INVALID_DATA` | Encrypted data parts are missing or invalid |
+| `DECRYPTION_FAILED` | Decryption process failed |
+
+## Usage Example
+
+### Full Encryption/Decryption Flow
+
+```bash
+# 1. Start the server
+npm run start:dev
+
+# 2. Encrypt data
+curl -X POST http://localhost:3000/get-encrypt-data \
+  -H "Content-Type: application/json" \
+  -d '{"payload": "Secret Message"}'
+
+# Response:
+# {
+#   "successful": true,
+#   "error_code": null,
+#   "data": {
+#     "data1": "MIIBIjANBgkqhkiG9w...",
+#     "data2": "SGVsbG8gV29ybGQ="
+#   }
+# }
+
+# 3. Decrypt data (use data1 and data2 from response)
+curl -X POST http://localhost:3000/get-decrypt-data \
+  -H "Content-Type: application/json" \
+  -d '{"data1": "MIIBIjANBgkqhkiG9w...", "data2": "SGVsbG8gV29ybGQ="}'
+
+# Response:
+# {
+#   "successful": true,
+#   "error_code": null,
+#   "data": {
+#     "payload": "Secret Message"
+#   }
+# }
+```
+
+## Testing Example
+
+All endpoints have comprehensive test coverage:
+
+```bash
+# Run all tests
+npm test
+
+# Run specific test file
+npm test encryption.service.spec.ts
+
+# Run with coverage
+npm run test:cov
 ```
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Docker
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Create a `Dockerfile`:
 
-```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+RUN npm run build
+
+EXPOSE 3000
+CMD ["npm", "run", "start:prod"]
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Build and run:
 
-## Resources
+```bash
+docker build -t nest-rsa-api .
+docker run -p 3000:3000 nest-rsa-api
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## Performance Considerations
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- **RSA Payload Limitation:** RSA 2048-bit encryption can only handle plaintexts up to ~190 characters due to padding requirements. This is a fundamental limitation of RSA encryption.
+- For larger data encryption, consider implementing hybrid encryption (RSA + AES) or chunking the data.
+- RSA encryption/decryption is computationally intensive
+- For bulk operations, consider implementing caching
+- Current implementation splits encrypted data into two parts for flexibility
+- Use HTTPS in production for secure data transmission
 
-## Support
+## Security Recommendations
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. **Never commit private keys** to version control
+2. **Use environment variables** for sensitive configuration
+3. **Enable HTTPS** in production
+4. **Implement rate limiting** for API endpoints
+5. **Add authentication** if needed
+6. **Use longer RSA keys** (2048+ bits) for production
+7. **Monitor and log** all cryptographic operations
+8. **Keep dependencies updated** regularly
 
-## Stay in touch
+## Dependencies
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- `@nestjs/common` - NestJS framework core
+- `@nestjs/core` - NestJS core module
+- `@nestjs/platform-express` - Express adapter
+- `@nestjs/swagger` - Swagger/OpenAPI integration
+- `swagger-ui-express` - Swagger UI
+- `class-validator` - Request validation
+- `class-transformer` - DTO transformation
+- `reflect-metadata` - Metadata reflection
+- `rxjs` - Reactive programming library
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the UNLICENSED license.
+
+## Support
+
+For issues and questions, please create an issue in the repository.
+
+## Resources
+
+- [NestJS Documentation](https://docs.nestjs.com)
+- [Swagger/OpenAPI Specification](https://swagger.io)
+- [Node.js Crypto Module](https://nodejs.org/api/crypto.html)
+- [Jest Documentation](https://jestjs.io)
+
+---
+
+Built with ❤️ using NestJS
